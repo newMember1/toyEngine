@@ -7,7 +7,7 @@
 #include "camera.h"
 
 const float PI = 3.1415926;
-Camera globalCamera{glm::vec3(0, 0, 3)}; 
+static Camera globalCamera{glm::vec3(0, 0, 3)}; 
 
 enum class direction
 {
@@ -15,6 +15,11 @@ enum class direction
     BACKWARD,
     LEFT,
     RIGHT
+};
+
+enum class type{
+    AIR,
+    STONE
 };
 
 #endif

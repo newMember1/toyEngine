@@ -1,8 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "core/BaseStructures.h"
-#include "core/shader.h"
+#include "core/baseStructures.h"
 #include "scene.h"
 
 #include <iostream>
@@ -12,7 +11,7 @@ using namespace std;
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow *window);
+void processInput(GLFWwindow *window, std::shared_ptr<ScreenMovementsPublisher> publisher);
 
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
@@ -43,15 +42,17 @@ int main(void)
         return -1;
     }
 
+    auto publisher = std::make_shared<ScreenMovementsPublisher>();
+    scene myScene(800, 600, publisher);
     while (!glfwWindowShouldClose(window))
     {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        processInput(window);
+        processInput(window, publisher);
 
-        my_scene->draw();
+        myScene.draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -62,19 +63,31 @@ int main(void)
 
 //update objects and camera if necessary
 direction d;
-void processInput(GLFWwindow *window)
+void processInput(GLFWwindow *window, std::shared_ptr<ScreenMovementsPublisher> publisher)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        d = FORWARD;
+    {
+        d = direction::FORWARD;
+        publisher->notifyAllUpdateModel(deltaTime, d);
+    }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        d = BACKWARD;
+    {
+        d = direction::BACKWARD;
+        publisher->notifyAllUpdateModel(deltaTime, d);
+    }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        d = LEFT;
+    {
+        d = direction::LEFT;
+        publisher->notifyAllUpdateModel(deltaTime, d);
+    }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        d = RIGHT;
+    {
+        d = direction::RIGHT;
+        publisher->notifyAllUpdateModel(deltaTime, d);
+    }
 }
 
 //reseize window
@@ -87,6 +100,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 //handle view's change when left button is pressed
 float xPosPressed, yPosPressed;
+float deltaX, deltaY;
 bool pressed = false;
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
@@ -105,8 +119,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
     if(pressed)
     {
-        deltaX = xpos - pressedX;
-        deltaY = ypos - pressedY;
+        deltaX = xpos - xPosPressed;
+        deltaY = ypos - yPosPressed;
     }
 }
 

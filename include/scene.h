@@ -1,19 +1,24 @@
 #ifndef SCENE_H
 #define SCENE_H
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
 #include <memory>
 #include <vector>
-#include "shader.h"
+#include "core/baseStructures.h"
+#include "core/screenMovementsPublisher.h"
+#include "voxels/planeVoxel.h"
+#include "voxels/simpleBallVoxel.h"
 
 class scene
 {
 public:
-    scene(int w, int h, glm::mat4 m);
+    scene(int w, int h, std::shared_ptr<ScreenMovementsPublisher> p);
     void draw();
     void init();
 
 private:
-    int scrWidth, scrHeight;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+    int sceneTexWidth, sceneTexHeight;
+    std::shared_ptr<ScreenMovementsPublisher> publisher;
+    std::shared_ptr<PlaneVoxel> t = nullptr;
+    std::shared_ptr<SimpleBallVoxel> s = nullptr;
 };
 #endif

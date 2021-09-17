@@ -2,6 +2,7 @@
 #define SCREENMOVEMENTSPUBLISHER_H
 
 #include "voxelBase.h"
+#include <vector>
 #include <memory>
 
 class ScreenMovementsPublisher
@@ -30,7 +31,7 @@ public:
             obser->updateModel(deltaTime, d); 
     }
 
-    vector<std::shared_ptr<VoxelBase>> moveableObservers; //only stores moveable object
+    std::vector<std::shared_ptr<VoxelBase>> moveableObservers; //only stores moveable object
 };
 
 #endif
