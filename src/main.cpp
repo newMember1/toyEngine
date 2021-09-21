@@ -62,7 +62,7 @@ int main(void)
 }
 
 //update objects and camera if necessary
-direction d;
+Direction d;
 void processInput(GLFWwindow *window, std::shared_ptr<ScreenMovementsPublisher> publisher)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -70,23 +70,23 @@ void processInput(GLFWwindow *window, std::shared_ptr<ScreenMovementsPublisher> 
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        d = direction::FORWARD;
-        publisher->notifyAllUpdateModel(deltaTime, d);
+        d = Direction::FORWARD;
+        publisher->processKeyBoardInput(deltaTime, d);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        d = direction::BACKWARD;
-        publisher->notifyAllUpdateModel(deltaTime, d);
+        d = Direction::BACKWARD;
+        publisher->processKeyBoardInput(deltaTime, d);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        d = direction::LEFT;
-        publisher->notifyAllUpdateModel(deltaTime, d);
+        d = Direction::LEFT;
+        publisher->processKeyBoardInput(deltaTime, d);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        d = direction::RIGHT;
-        publisher->notifyAllUpdateModel(deltaTime, d);
+        d = Direction::RIGHT;
+        publisher->processKeyBoardInput(deltaTime, d);
     }
 }
 

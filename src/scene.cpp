@@ -12,14 +12,18 @@ void scene::draw()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    t->draw();
-    s->draw();
+    for(auto s : staticVoxels)
+        s->draw();
+    for(auto m : moveableVoxels)
+        m->draw();
 }
 
 void scene::init()
 {
-    t = std::make_shared<PlaneVoxel>();
-    s = std::make_shared<SimpleBallVoxel>();
-
-    publisher->attach(s);
+    auto s = std::make_shared<PlaneVoxel>();
+    auto m = std::make_shared<SimpleBallVoxel>();
+    staticVoxels.push_back(s);
+    moveableVoxels.push_back(m);
+    publisher->attach(m);
+    publisher->setStaticVoxels(staticVoxels);
 }

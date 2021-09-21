@@ -25,6 +25,7 @@ PlaneVoxel::PlaneVoxel()
     this->model = glm::mat4(1.0F);
     this->view = globalCamera.GetViewMatrix();
     this->projection = glm::perspective(glm::radians(45.0f), (float)(800)/(float)(600), 0.1f, 100.0f);
+    this->boundingBox = std::make_shared<AABB>(startPos, startPos + glm::vec3(xLen, yLen, zLen));
 
     genVertices();
     genBuffers();
@@ -34,6 +35,11 @@ PlaneVoxel::PlaneVoxel()
 PlaneVoxel::~PlaneVoxel()
 {
     
+}
+
+bool PlaneVoxel::rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r)
+{
+    return false;
 }
 
 void PlaneVoxel::pushSubVoxelPositions(float xStart, float yStart, float zStart, float xEnd, float yEnd, float zEnd)
@@ -122,13 +128,26 @@ void PlaneVoxel::genShaders()
     shaderProgram->setMat4("projection", projection);
 }
 
-void PlaneVoxel::updateModel(float deltaTime, direction d)
+void PlaneVoxel::updateModel(float deltaTime, Direction d)
+{   
+}
+
+void PlaneVoxel::updateModel(glm::mat4 m)
 {
-    
+    model = m;
+    glm::vec3 newStartPos = glm::vec3(model * glm::vec4(startPos, 1.0));
+    boundingBox = std::make_shared<AABB>(newStartPos, newStartPos + glm::vec3(xLen, yLen, zLen));
+    shaderProgram->use();
+    shaderProgram->setMat4("model", model);
 }
 
 void PlaneVoxel::updateView(glm::vec2 deltaDirec)
 {
+}
+
+void PlaneVoxel::move(glm::vec3 deltaMovement, std::vector<std::shared_ptr<VoxelBase> > moveables)
+{
+    //do nothind here
 }
 
 void PlaneVoxel::draw()

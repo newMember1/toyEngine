@@ -8,6 +8,8 @@
 #include "voxels/planeVoxel.h"
 #include "voxels/simpleBallVoxel.h"
 
+using std::shared_ptr;
+using std::vector;
 class scene
 {
 public:
@@ -17,8 +19,8 @@ public:
 
 private:
     int sceneTexWidth, sceneTexHeight;
-    std::shared_ptr<ScreenMovementsPublisher> publisher;
-    std::shared_ptr<PlaneVoxel> t = nullptr;
-    std::shared_ptr<SimpleBallVoxel> s = nullptr;
+    shared_ptr<ScreenMovementsPublisher> publisher;
+    vector<shared_ptr<VoxelBase>> staticVoxels;
+    vector<shared_ptr<VoxelBase>> moveableVoxels;
 };
 #endif
