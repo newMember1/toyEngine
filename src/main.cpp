@@ -52,7 +52,7 @@ int main(void)
         lastFrame = currentFrame;
         processInput(window, publisher);
 
-        myScene.draw();
+        myScene.draw(deltaTime);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -86,6 +86,16 @@ void processInput(GLFWwindow *window, std::shared_ptr<ScreenMovementsPublisher> 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
         d = Direction::RIGHT;
+        publisher->processKeyBoardInput(deltaTime, d);
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        d = Direction::UP;
+        publisher->processKeyBoardInput(deltaTime, d);
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        d = Direction::DOWN;
         publisher->processKeyBoardInput(deltaTime, d);
     }
 }

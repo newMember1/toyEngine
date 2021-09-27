@@ -19,6 +19,7 @@ public:
     virtual void updateModel(glm::mat4 m) override;
     virtual void updateView(glm::vec2 deltaDirec) override;
     virtual void move(glm::vec3 deltaMovement, std::vector<std::shared_ptr<VoxelBase> > staticVoxls) override;
+    virtual void handleGravity(float time, std::vector<std::shared_ptr<VoxelBase> > staticVoxls) override;
     virtual void draw() override;
 
 private:
@@ -36,7 +37,7 @@ private:
     glm::vec3 center;
     float radius;
     float deltaX, deltaY, deltaZ;
-    float speed = 1.0;
+    float moveSpeed = 1.0;
     float rotateSpeed = 1.0;
 };
 

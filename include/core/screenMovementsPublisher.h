@@ -34,21 +34,15 @@ public:
         moveableObservers.push_back(moveableObserver);
     }
 
+private:
     void notifyAllUpdateModel(float deltaTime, Direction d)
     {
         //only update objects that can move
         //if hit static objects, we should move it back a little
         for(auto obser : moveableObservers)
         {
-//            obser->updateModel(deltaTime, d);
-//            if(obser->voxelOverlap(staticVoxels[0]))
-//                std::cout<<"hit"<<std::endl;
-//            else
-//                std::cout<<"not hit"<<std::endl;
-            if(obser->moveAble == false)
-                continue;
             glm::vec3 deltaMovement;
-            float distance = obser->speed * deltaTime;
+            float distance = obser->moveSpeed * deltaTime;
             if(d == Direction::BACKWARD)
             {
                 deltaMovement = -distance * obser->frontDirection;
@@ -64,6 +58,14 @@ public:
             if(d == Direction::RIGHT)
             {
                 deltaMovement = -distance * obser->leftDirection;
+            }
+            if(d == Direction::UP)
+            {
+                deltaMovement = distance * glm::vec3(0, 1, 0);
+            }
+            if(d == Direction::DOWN)
+            {
+                deltaMovement = -distance * glm::vec3(0, 1, 0);
             }
             obser->move(deltaMovement, staticVoxels);
         }

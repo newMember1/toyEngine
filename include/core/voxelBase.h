@@ -20,6 +20,7 @@ public:
     virtual void draw() = 0;
 
     virtual int getIndex(int x, int y, int z) { return xCount * yCount * z + xCount * y + x; }
+    virtual void handleGravity(float time, std::vector<std::shared_ptr<VoxelBase> > staticVoxls) {}
 
     bool moveAble = false;
     float xLen, yLen, zLen;
@@ -32,7 +33,9 @@ public:
     glm::vec3 frontDirection{0, 0, -1};
     glm::vec3 leftDirection{-1, 0, 0};
     glm::vec3 upDirection{0, 1, 0};
-    float speed = 1.0f;
+    float moveSpeed = 1.0f;
+    float fallSpeed = 0.3;
+    MoveState mState = MoveState::NONE;
 
     glm::mat4 model, view, projection;
     unsigned int vao, vbo, ebo;

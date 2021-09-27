@@ -14,9 +14,9 @@ PlaneVoxel::PlaneVoxel()
     this->yLen = 0.2;
     this->zLen = 3;
 
-    this->xCount = 15;
+    this->xCount = 5;
     this->yCount = 1;
-    this->zCount = 15;
+    this->zCount = 5;
 
     this->deltaX = (1.0f) * xLen / xCount;
     this->deltaY = (1.0f) * yLen / yCount;

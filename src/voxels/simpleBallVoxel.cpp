@@ -2,7 +2,7 @@
 
 SimpleBallVoxel::SimpleBallVoxel()
 {
-    radius = 0.3;
+    radius = 0.1;
     this->startPos = glm::vec3(-0.5, -0.7, -1);
     float len = radius * 2 * sqrt(3);
     this->center = this->startPos + glm::vec3(len / 2);
@@ -32,7 +32,8 @@ SimpleBallVoxel::SimpleBallVoxel()
 }
 
 SimpleBallVoxel::~SimpleBallVoxel()
-{}
+{
+}
 
 bool SimpleBallVoxel::rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r)
 {
@@ -42,7 +43,10 @@ bool SimpleBallVoxel::rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> 
 bool SimpleBallVoxel::voxelOverlap(shared_ptr<VoxelBase> voxel, shared_ptr<AABB> box)
 {
     if(!box->intersects(voxel->boundingBox))
+    {
+        voxelHitResult->setStartPenetrating(false);
         return false;
+    }
 
     auto startPos = box->getBoxMin();
     auto endPos = box->getBoxMax();
@@ -50,9 +54,24 @@ bool SimpleBallVoxel::voxelOverlap(shared_ptr<VoxelBase> voxel, shared_ptr<AABB>
     glm::ivec3 indexI = (startPos - voxel->startPos) / glm::vec3(voxel->xLen / voxel->xCount, voxel->yLen / voxel->yCount, voxel->zLen / voxel->zCount);
     glm::ivec3 indexJ = (endPos - voxel->startPos) / glm::vec3(voxel->xLen / voxel->xCount, voxel->yLen / voxel->yCount, voxel->zLen / voxel->zCount);
 
+    //when run here, it means boundingBox is overlap, so there must be some [i, j, k]'s in voxel's range
+    //here[i, j, k] means the ith cut-off face in x-direction, y means in y-direction, z means in z-direction
     indexI = glm::clamp(indexI, glm::ivec3(0), glm::ivec3(voxel->xCount, voxel->yCount, voxel->zCount));
     indexJ = glm::clamp(indexJ, glm::ivec3(0), glm::ivec3(voxel->xCount, voxel->yCount, voxel->zCount));
 
+    auto sPos = glm::vec3(model * glm::vec4(startPos, 1.0f));
+    auto ePos = sPos + glm::vec3(xLen, yLen, zLen);
+
+#ifdef DEBUG_VOXELOVERLAP
+    std::cout<<"===========================voxelOverlap==========================="<<std::endl;
+    std::cout<<"startPos: "<<sPos.x<<" "<<sPos.y<<" "<<sPos.z<<std::endl;
+    std::cout<<"endPos: "<<ePos.x<<" "<<ePos.y<<" "<<ePos.z<<std::endl;
+    std::cout<<"indexI: "<<indexI.x<<" "<<indexI.y<<" "<<indexI.z<<std::endl;
+    std::cout<<"indexJ: "<<indexJ.x<<" "<<indexJ.y<<" "<<indexJ.z<<std::endl;
+    std::cout<<"===========================voxelOverlap==========================="<<std::endl<<std::endl;
+#endif
+    //here [i, j, k] means the ith sub-voxel in x-direction, etc.
+    //note that x cut-off face is one more than xCount, so does y cut-off yCount etc.
     for(int i = indexI.x; i <= indexJ.x; ++i)
         for(int j = indexI.y; j <= indexJ.y; ++j)
             for(int k = indexI.z; k <= indexJ.z; ++k)
@@ -60,11 +79,12 @@ bool SimpleBallVoxel::voxelOverlap(shared_ptr<VoxelBase> voxel, shared_ptr<AABB>
                 if(voxel->types[voxel->getIndex(i, j, k)] != 0)
                 {
                     voxelHitResult->setPenetrationDepth(getMaxPenetration(i, j, k, voxel, startPos, endPos));
-                    std::cout<<voxelHitResult->getPenetrationDepth()<<std::endl;
+                    voxelHitResult->setStartPenetrating(true);
                     return true;
                 }
             }
 
+    voxelHitResult->setStartPenetrating(false);
     return false;
 }
 
@@ -75,7 +95,7 @@ float SimpleBallVoxel::getMaxPenetration(int i, int j, int k, shared_ptr<VoxelBa
     int positiveZ = 1;
     if(frontDirection.x < 0)
         positiveX = 0;
-    if(frontDirection.y < 0)
+    if(mState == MoveState::DOWN)
         positiveY = 0;
     if(frontDirection.z < 0)
         positiveZ = 0;
@@ -100,10 +120,20 @@ float SimpleBallVoxel::getMaxPenetration(int i, int j, int k, shared_ptr<VoxelBa
         voxelPoint.z += voxelDelta.z;
     }
 
+#ifdef DEBUG_VOXELOVERLAP
+    std::cout<<"===========================getMaxPenetration==========================="<<std::endl;
+    std::cout<<"startPos: "<<startPos.x<<" "<<startPos.y<<" "<<startPos.z<<std::endl;
+    std::cout<<"endPos: "<<endPos.x<<" "<<endPos.y<<" "<<endPos.z<<std::endl;
+    std::cout<<"colliPoint: "<<colliPoint.x<<" "<<colliPoint.y<<" "<<colliPoint.z<<std::endl;
+    std::cout<<"voxelPoint: "<<voxelPoint.x<<" "<<voxelPoint.y<<" "<<voxelPoint.z<<std::endl;
+    std::cout<<"===========================getMaxPenetration==========================="<<std::endl<<std::endl;
+#endif
+
     float xPen = glm::abs(voxelPoint.x - colliPoint.x);
     float yPen = glm::abs(voxelPoint.y - colliPoint.y);
     float zPen = glm::abs(voxelPoint.z - colliPoint.z);
-    return glm::max(xPen, glm::max(yPen, zPen));
+
+    return glm::min(xPen, glm::min(yPen, zPen));
 }
 
 void SimpleBallVoxel::updateView(glm::vec2 deltaDirec)
@@ -114,19 +144,27 @@ void SimpleBallVoxel::updateModel(float deltaTime, Direction d)
     glm::vec3 deltaMovement;
     if(d == Direction::BACKWARD)
     {
-        deltaMovement = -speed * deltaTime * glm::vec3(upDirection);
+        deltaMovement = -moveSpeed * deltaTime * glm::vec3(upDirection);
     }
     if(d == Direction::FORWARD)
     {
-        deltaMovement = speed * deltaTime * glm::vec3(upDirection);
+        deltaMovement = moveSpeed * deltaTime * glm::vec3(upDirection);
     }
     if(d == Direction::LEFT)
     {
-        deltaMovement = speed * deltaTime * glm::vec3(leftDirection);
+        deltaMovement = moveSpeed * deltaTime * glm::vec3(leftDirection);
     }
     if(d == Direction::RIGHT)
     {
-        deltaMovement = -speed * deltaTime * glm::vec3(leftDirection);
+        deltaMovement = -moveSpeed * deltaTime * glm::vec3(leftDirection);
+    }
+    if(d == Direction::UP)
+    {
+        deltaMovement = moveSpeed * deltaTime * glm::vec3(0, 1, 0);
+    }
+    if(d == Direction::DOWN)
+    {
+        deltaMovement = -moveSpeed * deltaTime * glm::vec3(0, 1, 0);
     }
 
     updateModel(glm::translate(model, deltaMovement));
@@ -141,23 +179,59 @@ void SimpleBallVoxel::updateModel(glm::mat4 m)
     shaderProgram->setMat4("model", model);
 }
 
+void SimpleBallVoxel::handleGravity(float time, std::vector<std::shared_ptr<VoxelBase> > staticVoxls)
+{
+    //simple move down
+    auto deltaMovement = -time * fallSpeed * glm::vec3(0, 1, 0);
+    glm::mat4 tmpModel = glm::translate(model, deltaMovement);
+    auto tmpStartPos = glm::vec3(tmpModel * glm::vec4(startPos, 1.0f));
+    auto tmpBoundingBox = std::make_shared<AABB>(tmpStartPos, tmpStartPos + glm::vec3(xLen, yLen, zLen));
+    mState = MoveState::DOWN;
+
+    for(auto v : staticVoxls)
+    {
+        if(!voxelOverlap(v, tmpBoundingBox))
+        {
+            continue;
+        }
+    }
+
+    if(voxelHitResult->getStartPenetrating())
+    {
+        //move back penetrationDepth + epslion
+        float backDistance = voxelHitResult->getPenetrationDepth() + DISTANCE_EPSLION;
+        tmpModel = glm::translate(tmpModel, -backDistance * glm::normalize(deltaMovement));
+    }
+
+    updateModel(tmpModel);
+}
+
 void SimpleBallVoxel::move(glm::vec3 deltaMovement, std::vector<std::shared_ptr<VoxelBase> > staticVoxls)
 {
     glm::mat4 tmpModel = glm::translate(model, deltaMovement);
     auto tmpStartPos = glm::vec3(tmpModel * glm::vec4(startPos, 1.0f));
     auto tmpBoundingBox = std::make_shared<AABB>(tmpStartPos, tmpStartPos + glm::vec3(xLen, yLen, zLen));
+    if(deltaMovement.y > 0)
+        mState = MoveState::UP;
+    if(deltaMovement.y < 0)
+        mState = MoveState::DOWN;
+
     for(auto v : staticVoxls)
     {
         if(!voxelOverlap(v, tmpBoundingBox))
+        {
             continue;
+        }
     }
 
-    if(voxelHitResult->getPenetrationDepth() != 0)
+    if(voxelHitResult->getStartPenetrating())
     {
-        std::cout<<"hit"<<std::endl;
+        //move back penetrationDepth + epslion
+        float backDistance = voxelHitResult->getPenetrationDepth() + DISTANCE_EPSLION;
+        tmpModel = glm::translate(tmpModel, -backDistance * glm::normalize(deltaMovement));
     }
-    else
-        updateModel(tmpModel);
+
+    updateModel(tmpModel);
 }
 
 void SimpleBallVoxel::draw()

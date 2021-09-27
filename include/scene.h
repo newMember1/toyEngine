@@ -14,10 +14,12 @@ class scene
 {
 public:
     scene(int w, int h, std::shared_ptr<ScreenMovementsPublisher> p);
-    void draw();
+    void draw(float time);
     void init();
 
 private:
+    void handleGravity(float time);
+
     int sceneTexWidth, sceneTexHeight;
     shared_ptr<ScreenMovementsPublisher> publisher;
     vector<shared_ptr<VoxelBase>> staticVoxels;
