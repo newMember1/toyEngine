@@ -18,7 +18,7 @@ public:
     void init();
 
 private:
-    void handleGravity(float time);
+    void moveVoxels(float time);
 
     int sceneTexWidth, sceneTexHeight;
     shared_ptr<ScreenMovementsPublisher> publisher;

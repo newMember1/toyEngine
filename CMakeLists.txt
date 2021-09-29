@@ -7,8 +7,9 @@ include_directories(${ROOT_DIR}/include/)
 link_directories(${ROOT_DIR}/lib)
 
 file(GLOB RES_FILES *.frag *.vert)
+file(GLOB CORE "src/core/*")
 file(GLOB VOXELS "src/voxels/*")
 file(GLOB TOYPHYSICS "src/toyPhysics/*")
 
-add_executable(${projectName} ${ROOT_DIR}/src/main.cpp ${ROOT_DIR}/src/scene.cpp ${ROOT_DIR}/src/glad.c ${RES_FILES} ${VOXELS} ${TOYPHYSICS})
+add_executable(${projectName} ${ROOT_DIR}/src/main.cpp ${ROOT_DIR}/src/scene.cpp ${ROOT_DIR}/src/glad.c ${RES_FILES} ${CORE} ${VOXELS} ${TOYPHYSICS})
 target_link_libraries(${projectName} ${ROOT_DIR}/lib/libglfw3.a dl m GL X11 pthread)

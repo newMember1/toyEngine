@@ -26,7 +26,7 @@ public:
     void setImpactPoint(vec3 i) { impactPoint = i; }
     vec3 getImpactPoint() { return impactPoint; }
 
-    void setNormal(vec3 n) { impactNormal = glm::normalize(n); }
+    void setNormal(vec3 n) { normal = glm::normalize(n); }
     vec3 getNormal() { return normal; }
 
     void setImpactNormal(vec3 n) { impactNormal = glm::normalize(n); }

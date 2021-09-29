@@ -40,16 +40,16 @@ bool SimpleBallVoxel::rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> 
     return false;
 }
 
-bool SimpleBallVoxel::voxelOverlap(shared_ptr<VoxelBase> voxel, shared_ptr<AABB> box)
+bool SimpleBallVoxel::voxelOverlap(shared_ptr<VoxelBase> voxel, AABB tmpBoundingBox)
 {
-    if(!box->intersects(voxel->boundingBox))
+    if(!tmpBoundingBox.intersects(voxel->boundingBox))
     {
         voxelHitResult->setStartPenetrating(false);
         return false;
     }
 
-    auto startPos = box->getBoxMin();
-    auto endPos = box->getBoxMax();
+    glm::vec3 startPos = tmpBoundingBox.getBoxMin();
+    glm::vec3 endPos = tmpBoundingBox.getBoxMax();
 
     glm::ivec3 indexI = (startPos - voxel->startPos) / glm::vec3(voxel->xLen / voxel->xCount, voxel->yLen / voxel->yCount, voxel->zLen / voxel->zCount);
     glm::ivec3 indexJ = (endPos - voxel->startPos) / glm::vec3(voxel->xLen / voxel->xCount, voxel->yLen / voxel->yCount, voxel->zLen / voxel->zCount);
@@ -58,9 +58,6 @@ bool SimpleBallVoxel::voxelOverlap(shared_ptr<VoxelBase> voxel, shared_ptr<AABB>
     //here[i, j, k] means the ith cut-off face in x-direction, y means in y-direction, z means in z-direction
     indexI = glm::clamp(indexI, glm::ivec3(0), glm::ivec3(voxel->xCount, voxel->yCount, voxel->zCount));
     indexJ = glm::clamp(indexJ, glm::ivec3(0), glm::ivec3(voxel->xCount, voxel->yCount, voxel->zCount));
-
-    auto sPos = glm::vec3(model * glm::vec4(startPos, 1.0f));
-    auto ePos = sPos + glm::vec3(xLen, yLen, zLen);
 
 #ifdef DEBUG_VOXELOVERLAP
     std::cout<<"===========================voxelOverlap==========================="<<std::endl;
@@ -78,7 +75,8 @@ bool SimpleBallVoxel::voxelOverlap(shared_ptr<VoxelBase> voxel, shared_ptr<AABB>
             {
                 if(voxel->types[voxel->getIndex(i, j, k)] != 0)
                 {
-                    voxelHitResult->setPenetrationDepth(getMaxPenetration(i, j, k, voxel, startPos, endPos));
+                    //when box hit, we need to get the minium penetration and it's direction
+                    voxelHitResult->setPenetrationDepth(getPenetration(i, j, k, voxel, startPos, endPos));
                     voxelHitResult->setStartPenetrating(true);
                     return true;
                 }
@@ -88,16 +86,16 @@ bool SimpleBallVoxel::voxelOverlap(shared_ptr<VoxelBase> voxel, shared_ptr<AABB>
     return false;
 }
 
-float SimpleBallVoxel::getMaxPenetration(int i, int j, int k, shared_ptr<VoxelBase> voxel, glm::vec3 startPos, glm::vec3 endPos)
+float SimpleBallVoxel::getPenetration(int i, int j, int k, shared_ptr<VoxelBase> voxel, glm::vec3 startPos, glm::vec3 endPos)
 {
     int positiveX = 1;
     int positiveY = 1;
     int positiveZ = 1;
-    if(frontDirection.x < 0)
+    if(speed.x < 0)
         positiveX = 0;
-    if(mState == MoveState::DOWN)
+    if(speed.y < 0)
         positiveY = 0;
-    if(frontDirection.z < 0)
+    if(speed.z < 0)
         positiveZ = 0;
 
     glm::vec3 colliPoint = endPos;
@@ -133,42 +131,37 @@ float SimpleBallVoxel::getMaxPenetration(int i, int j, int k, shared_ptr<VoxelBa
     float yPen = glm::abs(voxelPoint.y - colliPoint.y);
     float zPen = glm::abs(voxelPoint.z - colliPoint.z);
 
+    float xyMin = glm::min(xPen, yPen);
+    float xzMin = glm::min(xPen, zPen);
+    float yzMin = glm::min(yPen, zPen);
+
+    if(zPen < xyMin)
+    {
+        if(positiveZ)
+            voxelHitResult->setNormal({0, 0, 1});
+        else
+            voxelHitResult->setNormal({0, 0, -1});
+    }
+    else if(yPen < xzMin)
+    {
+        if(positiveY)
+            voxelHitResult->setNormal({0, -1, 0});
+        else
+            voxelHitResult->setNormal({0, 1, 0});
+    }
+    else if(xPen < yzMin)
+    {
+        if(positiveX)
+            voxelHitResult->setNormal({1, 0, 0});
+        else
+            voxelHitResult->setNormal({-1, 0, 0});
+    }
+
     return glm::min(xPen, glm::min(yPen, zPen));
 }
 
 void SimpleBallVoxel::updateView(glm::vec2 deltaDirec)
 {}
-
-void SimpleBallVoxel::updateModel(float deltaTime, Direction d)
-{
-    glm::vec3 deltaMovement;
-    if(d == Direction::BACKWARD)
-    {
-        deltaMovement = -moveSpeed * deltaTime * glm::vec3(upDirection);
-    }
-    if(d == Direction::FORWARD)
-    {
-        deltaMovement = moveSpeed * deltaTime * glm::vec3(upDirection);
-    }
-    if(d == Direction::LEFT)
-    {
-        deltaMovement = moveSpeed * deltaTime * glm::vec3(leftDirection);
-    }
-    if(d == Direction::RIGHT)
-    {
-        deltaMovement = -moveSpeed * deltaTime * glm::vec3(leftDirection);
-    }
-    if(d == Direction::UP)
-    {
-        deltaMovement = moveSpeed * deltaTime * glm::vec3(0, 1, 0);
-    }
-    if(d == Direction::DOWN)
-    {
-        deltaMovement = -moveSpeed * deltaTime * glm::vec3(0, 1, 0);
-    }
-
-    updateModel(glm::translate(model, deltaMovement));
-}
 
 void SimpleBallVoxel::updateModel(glm::mat4 m)
 {
@@ -179,14 +172,15 @@ void SimpleBallVoxel::updateModel(glm::mat4 m)
     shaderProgram->setMat4("model", model);
 }
 
-void SimpleBallVoxel::handleGravity(float time, std::vector<std::shared_ptr<VoxelBase> > staticVoxls)
+void SimpleBallVoxel::move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > staticVoxls)
 {
-    //simple move down
-    auto deltaMovement = -time * fallSpeed * glm::vec3(0, 1, 0);
+    glm::vec3 oldSpeed = speed;
+    updateSpeed(deltaTime);
+    glm::vec3 deltaMovement = (speed + oldSpeed) * deltaTime / 2.0f;
+
     glm::mat4 tmpModel = glm::translate(model, deltaMovement);
     auto tmpStartPos = glm::vec3(tmpModel * glm::vec4(startPos, 1.0f));
-    auto tmpBoundingBox = std::make_shared<AABB>(tmpStartPos, tmpStartPos + glm::vec3(xLen, yLen, zLen));
-    mState = MoveState::DOWN;
+    AABB tmpBoundingBox{tmpStartPos, tmpStartPos + glm::vec3(xLen, yLen, zLen)};
 
     for(auto v : staticVoxls)
     {
@@ -200,38 +194,39 @@ void SimpleBallVoxel::handleGravity(float time, std::vector<std::shared_ptr<Voxe
     {
         //move back penetrationDepth + epslion
         float backDistance = voxelHitResult->getPenetrationDepth() + DISTANCE_EPSLION;
-        tmpModel = glm::translate(tmpModel, -backDistance * glm::normalize(deltaMovement));
+        tmpModel = glm::translate(tmpModel, backDistance * voxelHitResult->getNormal());
+
+        if(glm::abs(voxelHitResult->getNormal().y - 1.0f) < FLOAT_EPSLION)
+        {
+            speed.y = 0;
+            onEarth = true;
+        }
+        else
+            onEarth = false;
+    }
+    else
+    {
+        onEarth = false;
     }
 
     updateModel(tmpModel);
 }
 
-void SimpleBallVoxel::move(glm::vec3 deltaMovement, std::vector<std::shared_ptr<VoxelBase> > staticVoxls)
+void SimpleBallVoxel::setSpeed(ACTION a)
 {
-    glm::mat4 tmpModel = glm::translate(model, deltaMovement);
-    auto tmpStartPos = glm::vec3(tmpModel * glm::vec4(startPos, 1.0f));
-    auto tmpBoundingBox = std::make_shared<AABB>(tmpStartPos, tmpStartPos + glm::vec3(xLen, yLen, zLen));
-    if(deltaMovement.y > 0)
-        mState = MoveState::UP;
-    if(deltaMovement.y < 0)
-        mState = MoveState::DOWN;
-
-    for(auto v : staticVoxls)
+    if(a == ACTION::FRONT)
+        speed.z = -1;
+    else if(a == ACTION::BACKWARD)
+        speed.z = 1;
+    else if(a == ACTION::LEFT)
+        speed.x = -1;
+    else if(a == ACTION::RIGHT)
+        speed.x = 1;
+    else if(a == ACTION::JUMP)
     {
-        if(!voxelOverlap(v, tmpBoundingBox))
-        {
-            continue;
-        }
+        if(onEarth)
+            speed.y = 5;
     }
-
-    if(voxelHitResult->getStartPenetrating())
-    {
-        //move back penetrationDepth + epslion
-        float backDistance = voxelHitResult->getPenetrationDepth() + DISTANCE_EPSLION;
-        tmpModel = glm::translate(tmpModel, -backDistance * glm::normalize(deltaMovement));
-    }
-
-    updateModel(tmpModel);
 }
 
 void SimpleBallVoxel::draw()

@@ -7,7 +7,10 @@
 #include "camera.h"
 
 const float PI = 3.1415926;
+const float FLOAT_EPSLION = 1e-6;
 const float DISTANCE_EPSLION = 1e-6;
+const float SPEED_EPSLION = 1e-6;
+const float G = 9.8;
 static Camera globalCamera{glm::vec3(0, 0, 3)}; 
 
 class Ray
@@ -45,14 +48,14 @@ public:
     glm::vec3 yAxis;
 };
 
-enum class Direction
+enum class ACTION
 {
-    FORWARD,
+    FRONT,
     BACKWARD,
     LEFT,
     RIGHT,
-    UP,
-    DOWN
+    JUMP,
+    NONE
 };
 
 enum class MoveState

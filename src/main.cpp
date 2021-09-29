@@ -62,42 +62,36 @@ int main(void)
 }
 
 //update objects and camera if necessary
-Direction d;
+ACTION a = ACTION::NONE;
 void processInput(GLFWwindow *window, std::shared_ptr<ScreenMovementsPublisher> publisher)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
     {
-        d = Direction::FORWARD;
-        publisher->processKeyBoardInput(deltaTime, d);
+        a = ACTION::JUMP;
     }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        d = Direction::BACKWARD;
-        publisher->processKeyBoardInput(deltaTime, d);
+        a = ACTION::FRONT;
     }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        d = Direction::LEFT;
-        publisher->processKeyBoardInput(deltaTime, d);
+        a = ACTION::BACKWARD;
     }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        d = Direction::RIGHT;
-        publisher->processKeyBoardInput(deltaTime, d);
+        a = ACTION::LEFT;
     }
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        d = Direction::UP;
-        publisher->processKeyBoardInput(deltaTime, d);
+        a = ACTION::RIGHT;
     }
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-    {
-        d = Direction::DOWN;
-        publisher->processKeyBoardInput(deltaTime, d);
-    }
+    else
+        return;
+
+    publisher->processKeyBoardInput(a);
 }
 
 //reseize window

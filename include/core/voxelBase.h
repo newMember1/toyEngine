@@ -12,15 +12,15 @@ class VoxelBase
 {
 public:
     virtual ~VoxelBase(){};
-    virtual void updateModel(float deltaTime, Direction d) = 0;
     virtual void updateModel(glm::mat4 m) = 0;
     virtual void updateView(glm::vec2 deltaDirec) = 0;
     virtual bool rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r) = 0;
-    virtual void move(glm::vec3 deltaMovement, std::vector<std::shared_ptr<VoxelBase>> moveables) = 0;
+    virtual void move(float deltaTime, std::vector<std::shared_ptr<VoxelBase>> moveables) = 0;
     virtual void draw() = 0;
 
-    virtual int getIndex(int x, int y, int z) { return xCount * yCount * z + xCount * y + x; }
-    virtual void handleGravity(float time, std::vector<std::shared_ptr<VoxelBase> > staticVoxls) {}
+    virtual int getIndex(int x, int y, int z);
+    virtual void setSpeed(ACTION a);
+    virtual void updateSpeed(float deltaTime);
 
     bool moveAble = false;
     float xLen, yLen, zLen;
@@ -33,8 +33,9 @@ public:
     glm::vec3 frontDirection{0, 0, -1};
     glm::vec3 leftDirection{-1, 0, 0};
     glm::vec3 upDirection{0, 1, 0};
-    float moveSpeed = 1.0f;
-    float fallSpeed = 0.3;
+
+    glm::vec3 speed {0.0f, 0.0f, 0.0f}; //speed in x,y,z axis
+    bool onEarth = false;
     MoveState mState = MoveState::NONE;
 
     glm::mat4 model, view, projection;

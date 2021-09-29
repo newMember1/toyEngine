@@ -128,10 +128,6 @@ void PlaneVoxel::genShaders()
     shaderProgram->setMat4("projection", projection);
 }
 
-void PlaneVoxel::updateModel(float deltaTime, Direction d)
-{   
-}
-
 void PlaneVoxel::updateModel(glm::mat4 m)
 {
     model = m;
@@ -145,7 +141,7 @@ void PlaneVoxel::updateView(glm::vec2 deltaDirec)
 {
 }
 
-void PlaneVoxel::move(glm::vec3 deltaMovement, std::vector<std::shared_ptr<VoxelBase> > moveables)
+void PlaneVoxel::move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > staticVoxels)
 {
     //do nothind here
 }

@@ -17,10 +17,10 @@ public:
         staticVoxels = s;
     }
 
-    void processKeyBoardInput(float deltaTime, Direction d)
+    void processKeyBoardInput(ACTION a)
     {
-        //handel objects model matrix
-        notifyAllUpdateModel(deltaTime, d);
+        //update speed
+        notifyAllUpdateSpeed(a);
     }
 
     void processMouseInput(glm::vec2 deltaDirec)
@@ -35,42 +35,17 @@ public:
     }
 
 private:
-    void notifyAllUpdateModel(float deltaTime, Direction d)
+    void notifyAllUpdateSpeed(ACTION a)
     {
         //only update objects that can move
         //if hit static objects, we should move it back a little
         for(auto obser : moveableObservers)
         {
-            glm::vec3 deltaMovement;
-            float distance = obser->moveSpeed * deltaTime;
-            if(d == Direction::BACKWARD)
-            {
-                deltaMovement = -distance * obser->frontDirection;
-            }
-            if(d == Direction::FORWARD)
-            {
-                deltaMovement = distance * obser->frontDirection;
-            }
-            if(d == Direction::LEFT)
-            {
-                deltaMovement = distance * obser->leftDirection;
-            }
-            if(d == Direction::RIGHT)
-            {
-                deltaMovement = -distance * obser->leftDirection;
-            }
-            if(d == Direction::UP)
-            {
-                deltaMovement = distance * glm::vec3(0, 1, 0);
-            }
-            if(d == Direction::DOWN)
-            {
-                deltaMovement = -distance * glm::vec3(0, 1, 0);
-            }
-            obser->move(deltaMovement, staticVoxels);
+            obser->setSpeed(a);
         }
     }
 
+private:
     vector<shared_ptr<VoxelBase>> moveableObservers;
     vector<shared_ptr<VoxelBase>> staticVoxels;
 };

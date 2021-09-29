@@ -8,10 +8,10 @@ scene::scene(int w, int h, std::shared_ptr<ScreenMovementsPublisher> p)
     init();
 }
 
-void scene::handleGravity(float time)
+void scene::moveVoxels(float time)
 {
     for(auto m : moveableVoxels)
-        m->handleGravity(time, staticVoxels);
+        m->move(time, staticVoxels);
 }
 
 void scene::draw(float time)
@@ -20,7 +20,7 @@ void scene::draw(float time)
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    handleGravity(time);
+    moveVoxels(time);
     for(auto s : staticVoxels)
         s->draw();
     for(auto m : moveableVoxels)

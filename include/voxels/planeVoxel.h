@@ -14,11 +14,10 @@ class PlaneVoxel : public VoxelBase
 public:
     PlaneVoxel();
     virtual ~PlaneVoxel();
-    virtual bool rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r) override;
-    virtual void updateModel(float deltaTime, Direction d) override;
     virtual void updateModel(glm::mat4 m) override;
     virtual void updateView(glm::vec2 deltaDirec) override;
-    virtual void move(glm::vec3 deltaMovement, std::vector<std::shared_ptr<VoxelBase> > moveables) override;
+    virtual bool rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r) override;
+    virtual void move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > staticVoxels) override;
     virtual void draw() override;
 
 private:
