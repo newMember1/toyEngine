@@ -8,11 +8,11 @@ using std::endl;
 
 PlaneVoxel::PlaneVoxel()
 {
-    this->startPos = glm::vec3(-1.5, -1, -1.5);
+    this->startPos = glm::vec3(-10, -1, -10);
 
-    this->xLen = 3;
+    this->xLen = 20;
     this->yLen = 0.2;
-    this->zLen = 3;
+    this->zLen = 20;
 
     this->xCount = 5;
     this->yCount = 1;
@@ -121,7 +121,7 @@ void PlaneVoxel::genBuffers()
 
 void PlaneVoxel::genShaders()
 {
-    shaderProgram = std::make_shared<Shader>("../shaders/test.vert", "../shaders/test.frag");
+    shaderProgram = std::make_shared<Shader>("../shaders/constColor.vert", "../shaders/constColor.frag");
     shaderProgram->use();
     shaderProgram->setMat4("model", model);
     shaderProgram->setMat4("view", view);
@@ -148,8 +148,9 @@ void PlaneVoxel::move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > 
 
 void PlaneVoxel::draw()
 {
-//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     shaderProgram->use();
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+    shaderProgram->release();
 }

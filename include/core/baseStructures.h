@@ -11,6 +11,13 @@ const float FLOAT_EPSLION = 1e-6;
 const float DISTANCE_EPSLION = 1e-6;
 const float SPEED_EPSLION = 1e-6;
 const float G = 9.8;
+
+//used for sky atmosphere, all distance here are in kilometers so absorptions cofficient will be in 1/kilomters.
+const float EARTHBOTTOMRADIUS = 6360.f;
+const float EARTHTOPRADISU = 6420.f;
+const float EARTHRAYLEIGHSCALEHEIGHT = 8.0f;
+const float EARTHMIESCALEHEIGHT = 1.2f;
+
 static Camera globalCamera{glm::vec3(0, 0, 3)}; 
 
 class Ray

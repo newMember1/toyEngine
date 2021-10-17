@@ -16,13 +16,14 @@ void scene::moveVoxels(float time)
 
 void scene::draw(float time)
 {
-    glEnable(GL_DEPTH_TEST);
+
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
     //draw sky
-    sky->draw();
+    glDisable(GL_DEPTH_TEST);
+    sky->draw(time);
+    glEnable(GL_DEPTH_TEST);
 
     //draw voxels
     moveVoxels(time);
@@ -36,7 +37,6 @@ void scene::init()
 {
     //init sky
     sky = std::make_shared<Sky>();
-
 
     //init objects
     auto s = std::make_shared<PlaneVoxel>();

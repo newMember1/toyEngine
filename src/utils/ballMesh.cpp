@@ -58,9 +58,6 @@ void BallMesh::generateIndices(int angle)
             int bottomLeft = topLeft + columns;
             int bottomRight = topRight + columns;
 
-            std::cout<<"topLeft: "<<topLeft<<" "<<topRight<<std::endl;
-            std::cout<<"bottomLeft: "<<bottomLeft<<" "<<bottomRight<<std::endl<<std::endl;
-
             indices[count * 3 + 0] = topLeft;
             indices[count * 3 + 1] = bottomLeft;
             indices[count * 3 + 2] = bottomRight;
@@ -73,7 +70,6 @@ void BallMesh::generateIndices(int angle)
         }
 
     int bottomStart = rows * columns + 1;
-    std::cout<<"bottomStart: "<<bottomStart<<std::endl;
     for (int i = 0; i < topTriangles; i++)
     {
         indices[count * 3 + 0] = bottomStart + i;

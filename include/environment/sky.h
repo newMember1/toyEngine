@@ -10,13 +10,20 @@ class Sky
 {
 public:
     Sky();
-    void draw();
+    void draw(float time);
 
 private:
     std::shared_ptr<BallMesh> ballMesh = nullptr;
-    std::shared_ptr<Shader> skyMeshShader = nullptr;
-    unsigned int skyVAO, skyVBO, skyEBO;
+    std::shared_ptr<Shader> atmosphereShader = nullptr;
 
+    //for atmosphere's rendering
+    unsigned int skyVAO, skyVBO, skyEBO;
+    glm::mat4 skyBallModel, skyBallView, skyBallProjection;
+    glm::mat4 sunModel, sunView, sunProjection;
+    std::shared_ptr<Camera> skyCamera = nullptr;
+    glm::vec3 sunDirec;
+
+    void update(float time);
     void initSkyMesh();
 };
 

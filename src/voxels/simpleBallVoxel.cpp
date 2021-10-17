@@ -234,6 +234,8 @@ void SimpleBallVoxel::draw()
     shaderProgram->use();
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+    shaderProgram->release();
 }
 
 void SimpleBallVoxel::pushSubVoxelPositions(float xStart, float yStart, float zStart, float xEnd, float yEnd, float zEnd)
@@ -321,7 +323,7 @@ void SimpleBallVoxel::genBuffers()
 
 void SimpleBallVoxel::genShaders()
 {
-    shaderProgram = std::make_shared<Shader>("../shaders/test.vert", "../shaders/test.frag");
+    shaderProgram = std::make_shared<Shader>("../shaders/constColor.vert", "../shaders/constColor.frag");
     shaderProgram->use();
     shaderProgram->setMat4("model", model);
     shaderProgram->setMat4("view", view);
