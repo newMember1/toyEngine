@@ -89,8 +89,3 @@ vector<int> BallMesh::getIndices()
 {
     return indices;
 }
-
-int BallMesh::getTriangleCount()
-{
-    return topTriangles * 2 + midTriangles;
-}

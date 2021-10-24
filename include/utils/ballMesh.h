@@ -13,7 +13,6 @@ public:
 
     vector<float> getPoints();
     vector<int> getIndices();
-    int getTriangleCount();
 private:
     int topTriangles;
     int midTriangles;
