@@ -19,7 +19,8 @@ void scene::draw(float time)
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     //draw sky
     glDisable(GL_DEPTH_TEST);
     sky->draw(time);
@@ -37,6 +38,7 @@ void scene::init()
 {
     //init sky
     sky = std::make_shared<Sky>();
+    sky->init(glm::vec3(1, 1, -1));
 
     //init objects
     auto s = std::make_shared<PlaneVoxel>();

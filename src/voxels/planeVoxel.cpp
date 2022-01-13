@@ -23,8 +23,8 @@ PlaneVoxel::PlaneVoxel()
     this->deltaZ = (1.0f) * zLen / zCount;
 
     this->model = glm::mat4(1.0F);
-    this->view = globalCamera.GetViewMatrix();
-    this->projection = glm::perspective(glm::radians(45.0f), (float)(800)/(float)(600), 0.1f, 100.0f);
+    this->view = globalCamera->GetViewMatrix();
+    this->projection = globalProjection;
     this->boundingBox = std::make_shared<AABB>(startPos, startPos + glm::vec3(xLen, yLen, zLen));
 
     genVertices();

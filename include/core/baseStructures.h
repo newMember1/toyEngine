@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "camera.h"
+#include <memory>
 
 const float PI = 3.1415926;
 const float FLOAT_EPSLION = 1e-6;
@@ -18,7 +19,8 @@ const float EARTHTOPRADISU = 6420.f;
 const float EARTHRAYLEIGHSCALEHEIGHT = 8.0f;
 const float EARTHMIESCALEHEIGHT = 1.2f;
 
-static Camera globalCamera{glm::vec3(0, 0, 3)}; 
+static std::shared_ptr<Camera> globalCamera = std::make_shared<Camera>(glm::vec3(0, 0, 3));
+static glm::mat4 globalProjection = glm::perspective(glm::radians(45.0f), (float)(800)/(float)(600), 0.1f, 100.0f);
 
 class Ray
 {

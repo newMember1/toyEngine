@@ -10,17 +10,17 @@ SimpleBallVoxel::SimpleBallVoxel()
     this->yLen = len;
     this->zLen = len;
 
-    this->xCount = 50;
-    this->yCount = 50;
-    this->zCount = 50;
+    this->xCount = 20;
+    this->yCount = 20;
+    this->zCount = 20;
 
     this->deltaX = xLen / xCount;
     this->deltaY = yLen / yCount;
     this->deltaZ = zLen / zCount;
 
     this->model = glm::mat4(1.0F);
-    this->view = globalCamera.GetViewMatrix();
-    this->projection = glm::perspective(glm::radians(45.0f), (float)(800)/(float)(600), 0.1f, 100.0f);
+    this->view = globalCamera->GetViewMatrix();
+    this->projection = globalProjection;
 
     this->boundingBox = std::make_shared<AABB>(startPos, startPos + glm::vec3(xLen, yLen, zLen));
     this->voxelHitResult = std::make_shared<VoxelHitResult>();
@@ -231,6 +231,8 @@ void SimpleBallVoxel::setSpeed(ACTION a)
 
 void SimpleBallVoxel::draw()
 {
+//    std::cout<<"start pos is: "<<startPos.x<<" "<<startPos.y<<" "<<startPos.z<<std::endl;
+//    std::cout<<"center is: "<<center.x<<" "<<center.y<<" "<<center.z<<std::endl;
     shaderProgram->use();
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
