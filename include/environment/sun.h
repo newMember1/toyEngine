@@ -3,7 +3,6 @@
 #include "core/baseStructures.h"
 #include "utils/ballMesh.h"
 #include "utils/circleMesh.h"
-#include "core/shader.h"
 #include <memory>
 
 using std::shared_ptr;
@@ -28,8 +27,8 @@ private:
     unsigned int sunEBO;
     unsigned int sunVBO;
 
+    std::string shaderName;
     shared_ptr<BallMesh> sunMesh = nullptr;
-    shared_ptr<Shader> sunShader = nullptr;
 };
 
 #endif // SUN_H

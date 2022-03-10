@@ -1,4 +1,5 @@
 #include "environment/sun.h"
+#include "core/resourceManager.h"
 
 void Sun::init(glm::vec3 direc)
 {
@@ -28,7 +29,8 @@ void Sun::init(glm::vec3 direc)
     glBindVertexArray(0);
 
     //4.sun shader
-    sunShader = std::make_shared<Shader>("../shaders/sun.vert", "../shaders/sun.frag");
+    shaderName = "sun";
+    auto sunShader = ResourceManager::getInstance().getShader(shaderName);
     sunShader->use();
     sunShader->setMat4("model", model);
     sunShader->setMat4("view", view);
@@ -38,6 +40,7 @@ void Sun::init(glm::vec3 direc)
 
 void Sun::draw(float time)
 {
+    auto sunShader = ResourceManager::getInstance().getShader(shaderName);
     sunShader->use();
     glBindVertexArray(sunVAO);
     glDrawElements(GL_TRIANGLES, sunMesh->getIndices().size(), GL_UNSIGNED_INT, 0);
@@ -49,6 +52,7 @@ void Sun::draw(float time)
 
 void Sun::update(float time)
 {
+    auto sunShader = ResourceManager::getInstance().getShader(shaderName);
     //need to update model matrix and sunDirec
     glm::mat4 rot = glm::rotate(glm::mat4{1.0f}, time / 2, glm::vec3(0, 0, 1));
     model = rot * model;

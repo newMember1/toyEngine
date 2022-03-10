@@ -4,7 +4,6 @@
 #include "core/baseStructures.h"
 #include "utils/ballMesh.h"
 #include "utils/circleMesh.h"
-#include "core/shader.h"
 #include <memory>
 
 using std::shared_ptr;
@@ -27,8 +26,8 @@ private:
     unsigned int ebo;
     unsigned int vbo;
 
+    std::string shaderName;
     shared_ptr<BallMesh> atmoMesh = nullptr;
-    shared_ptr<Shader> atmoShader = nullptr;
     shared_ptr<Camera> camera = nullptr;
 };
 

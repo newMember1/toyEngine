@@ -1,7 +1,6 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include "core/shader.h"
 #include "core/voxelBase.h"
 #include <memory>
 #include <vector>
@@ -23,14 +22,12 @@ public:
 private:
     void genVertices();
     void genBuffers();
-    void genShaders();
     void pushSubVoxelPositions(float xStart, float yStart, float zStart, float xEnd, float yEnd, float zEnd);
 
     vector<float> positions;
     vector<int> indices;
 
-    shared_ptr<Shader> shaderProgram = nullptr;
-
+    std::string shaderName;
     float deltaX, deltaY, deltaZ;
 };
 #endif

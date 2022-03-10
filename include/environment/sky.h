@@ -2,7 +2,6 @@
 #define SKY_H
 
 #include "core/baseStructures.h"
-#include "core/shader.h"
 #include "utils/ballMesh.h"
 #include "utils/circleMesh.h"
 #include "environment/sun.h"

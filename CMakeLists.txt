@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 set(projectName "toyGame")
 set(ROOT_DIR ${CMAKE_SOURCE_DIR})
+set(CMAKE_BUILD_TYPE "Debug")
 
 include_directories(${ROOT_DIR}/include/)
 link_directories(${ROOT_DIR}/lib)

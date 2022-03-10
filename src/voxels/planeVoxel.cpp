@@ -1,5 +1,6 @@
 #include "voxels/planeVoxel.h"
 #include "core/baseStructures.h"
+#include "core/resourceManager.h"
 #include <glad/glad.h>
 
 #include <iostream>
@@ -27,9 +28,9 @@ PlaneVoxel::PlaneVoxel()
     this->projection = globalProjection;
     this->boundingBox = std::make_shared<AABB>(startPos, startPos + glm::vec3(xLen, yLen, zLen));
 
+    shaderName = "constColor";
     genVertices();
     genBuffers();
-    genShaders();
 }
 
 PlaneVoxel::~PlaneVoxel()
@@ -119,22 +120,11 @@ void PlaneVoxel::genBuffers()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
 }
 
-void PlaneVoxel::genShaders()
-{
-    shaderProgram = std::make_shared<Shader>("../shaders/constColor.vert", "../shaders/constColor.frag");
-    shaderProgram->use();
-    shaderProgram->setMat4("model", model);
-    shaderProgram->setMat4("view", view);
-    shaderProgram->setMat4("projection", projection);
-}
-
 void PlaneVoxel::updateModel(glm::mat4 m)
 {
     model = m;
     glm::vec3 newStartPos = glm::vec3(model * glm::vec4(startPos, 1.0));
     boundingBox = std::make_shared<AABB>(newStartPos, newStartPos + glm::vec3(xLen, yLen, zLen));
-    shaderProgram->use();
-    shaderProgram->setMat4("model", model);
 }
 
 void PlaneVoxel::updateView(glm::vec2 deltaDirec)
@@ -148,9 +138,14 @@ void PlaneVoxel::move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > 
 
 void PlaneVoxel::draw()
 {
-    shaderProgram->use();
+    auto shader = ResourceManager::getInstance().getShader(shaderName);
+    shader->use();
+    shader->setVec4("color", glm::vec4(0.93, 0.91, 0.66, 1.0));
+    shader->setMat4("model", model);
+    shader->setMat4("view", view);
+    shader->setMat4("projection", projection);
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-    shaderProgram->release();
+    shader->release();
 }

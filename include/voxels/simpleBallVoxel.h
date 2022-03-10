@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <memory>
-#include "core/shader.h"
 #include "core/voxelBase.h"
 
 using std::vector;
@@ -24,7 +23,6 @@ public:
 private:
     void genVertices();
     void genBuffers();
-    void genShaders();
     void pushSubVoxelPositions(float xStart, float yStart, float zStart, float xEnd, float yEnd, float zEnd);
     float getPenetration(int i, int j, int k, shared_ptr<VoxelBase> voxel, glm::vec3 startPos, glm::vec3 endPos);
     bool voxelOverlap(shared_ptr<VoxelBase> voxel, AABB tmpBoundingBox);
@@ -32,7 +30,7 @@ private:
     vector<float> positions;
     vector<int> indices;
 
-    shared_ptr<Shader> shaderProgram = nullptr;
+    std::string shaderName;
     glm::vec3 center;
     float radius;
     float dampingCoefficient = 0.9;

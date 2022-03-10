@@ -1,4 +1,5 @@
 #include "voxels/simpleBallVoxel.h"
+#include "core/resourceManager.h"
 
 SimpleBallVoxel::SimpleBallVoxel()
 {
@@ -26,9 +27,9 @@ SimpleBallVoxel::SimpleBallVoxel()
     this->voxelHitResult = std::make_shared<VoxelHitResult>();
     this->moveAble = true;
 
+    shaderName = "constColor";
     genVertices();
     genBuffers();
-    genShaders();
 }
 
 SimpleBallVoxel::~SimpleBallVoxel()
@@ -168,8 +169,6 @@ void SimpleBallVoxel::updateModel(glm::mat4 m)
     model = m;
     glm::vec3 newStartPos = glm::vec3(model * glm::vec4(startPos, 1.0));
     boundingBox = std::make_shared<AABB>(newStartPos, newStartPos + glm::vec3(xLen, yLen, zLen));
-    shaderProgram->use();
-    shaderProgram->setMat4("model", model);
 }
 
 void SimpleBallVoxel::move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > staticVoxls)
@@ -231,9 +230,12 @@ void SimpleBallVoxel::setSpeed(ACTION a)
 
 void SimpleBallVoxel::draw()
 {
-//    std::cout<<"start pos is: "<<startPos.x<<" "<<startPos.y<<" "<<startPos.z<<std::endl;
-//    std::cout<<"center is: "<<center.x<<" "<<center.y<<" "<<center.z<<std::endl;
+    auto shaderProgram = ResourceManager::getInstance().getShader(shaderName);
     shaderProgram->use();
+    shaderProgram->setVec4("color", glm::vec4(0.82, 0.41, 0.12, 1.0));
+    shaderProgram->setMat4("model", model);
+    shaderProgram->setMat4("view", view);
+    shaderProgram->setMat4("projection", projection);
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
@@ -321,13 +323,4 @@ void SimpleBallVoxel::genBuffers()
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-}
-
-void SimpleBallVoxel::genShaders()
-{
-    shaderProgram = std::make_shared<Shader>("../shaders/constColor.vert", "../shaders/constColor.frag");
-    shaderProgram->use();
-    shaderProgram->setMat4("model", model);
-    shaderProgram->setMat4("view", view);
-    shaderProgram->setMat4("projection", projection);
 }

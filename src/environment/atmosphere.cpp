@@ -1,4 +1,5 @@
 #include "environment/atmosphere.h"
+#include "core/resourceManager.h"
 
 void Atmosphere::init(shared_ptr<Camera> cam)
 {
@@ -27,7 +28,8 @@ void Atmosphere::init(shared_ptr<Camera> cam)
     glBindVertexArray(0);
 
     //4.shader
-    atmoShader = std::make_shared<Shader>("../shaders/atmosphere.vert", "../shaders/atmosphere.frag");
+    shaderName = "atmosphere";
+    auto atmoShader = ResourceManager::getInstance().getShader(shaderName);
     atmoShader->use();
     atmoShader->setMat4("model", model);
     atmoShader->setMat4("view", view);
@@ -39,12 +41,14 @@ void Atmosphere::init(shared_ptr<Camera> cam)
 void Atmosphere::setSunDirec(glm::vec3 direc)
 {
     sunDirec = direc;
+    auto atmoShader = ResourceManager::getInstance().getShader(shaderName);
     atmoShader->use();
     atmoShader->setVec3("sunDirec", sunDirec);
 }
 
 void Atmosphere::draw(float time)
 {
+    auto atmoShader = ResourceManager::getInstance().getShader(shaderName);
     atmoShader->use();
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, atmoMesh->getIndices().size(), GL_UNSIGNED_INT, 0);
