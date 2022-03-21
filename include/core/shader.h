@@ -15,6 +15,35 @@ public:
     unsigned int ID;
     // constructor generates the shader on the fly
     // ------------------------------------------------------------------------
+
+    Shader(const char* computePath)
+    {
+        std::string computeCode;
+        std::ifstream cShaderFile;
+        cShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+        try {
+            cShaderFile.open(computePath);
+            std::stringstream cShaderStream;
+            cShaderStream << cShaderFile.rdbuf();
+            cShaderFile.close();
+            computeCode = cShaderStream.str();
+        } catch (std::ifstream::failure& e) {
+            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+        }
+
+        const char * cShaderCode = computeCode.c_str();
+        unsigned int compute;
+        compute = glCreateShader(GL_COMPUTE_SHADER);
+        glShaderSource(compute, 1, &cShaderCode, NULL);
+        glCompileShader(compute);
+        checkCompileErrors(compute, "COMPUTE");
+        ID = glCreateProgram();
+        glAttachShader(ID, compute);
+        glLinkProgram(ID);
+        checkCompileErrors(ID, "PROGRAM");
+        glDeleteShader(compute);
+    }
+
     Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
     {
         std::cout<<vertexPath<<std::endl;
