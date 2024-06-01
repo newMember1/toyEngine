@@ -11,7 +11,7 @@ using namespace std;
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow *window, std::shared_ptr<ScreenMovementsPublisher> publisher);
+void processInput(GLFWwindow *window, std::shared_ptr<MovePublisher> publisher);
 
 int SCR_WIDTH = 800;
 int SCR_HEIGHT = 600;
@@ -42,7 +42,7 @@ int main(void)
         return -1;
     }
 
-    auto publisher = std::make_shared<ScreenMovementsPublisher>();
+    auto publisher = std::make_shared<MovePublisher>();
     scene myScene(800, 600, publisher);
     while (!glfwWindowShouldClose(window))
     {
@@ -63,14 +63,18 @@ int main(void)
 
 //update objects and camera if necessary
 ACTION a = ACTION::NONE;
-void processInput(GLFWwindow *window, std::shared_ptr<ScreenMovementsPublisher> publisher)
+void processInput(GLFWwindow *window, std::shared_ptr<MovePublisher> publisher)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
     {
         a = ACTION::JUMP;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+    {
+        a = ACTION::DOWN;
     }
     else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {

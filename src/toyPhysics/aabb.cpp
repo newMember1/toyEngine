@@ -47,7 +47,6 @@ bool AABB::rayHit(std::shared_ptr<Ray> r, float minT, float maxT)
     }
 }
 
-#include <iostream>
 bool AABB::intersects(std::shared_ptr<AABB> box)
 {
     auto aMin = getBoxMin();

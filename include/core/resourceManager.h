@@ -7,10 +7,17 @@
 
 #include "core/camera.h"
 #include "core/shader.h"
+#include "core/texture.h"
 
+using std::string;
 using std::shared_ptr;
+using std::make_shared;
 using std::unordered_map;
 
+/*
+* consider the manager will be used in multi threads, we must be sure that
+* each thread can safely access the resoureces.
+*/
 class ResourceManager
 {
 public:
@@ -29,33 +36,46 @@ public:
         return ortho;
     }
 
-    shared_ptr<Shader> getShader(std::string name)
+    shared_ptr<Shader> getShader(string name)
     {
         if(shaderManager.find(name) != shaderManager.end())
             return shaderManager[name];
 
-        std::cout<<"SHADER: "<<name<<"not found!"<<std::endl;
+        cout<<"SHADER: "<<name<<"not found!"<<endl;
+    }
+
+    shared_ptr<Texture> getTexture(string name)
+    {
+        if(textureManager.find(name) != textureManager.end())
+            return textureManager[name];
+
+        cout<<"TEXTURE: "<<name<<"not found!"<<endl;
     }
 
     void setCamera(Camera cam)
     {
-        camera = std::make_shared<Camera>(cam);
+        camera = make_shared<Camera>(cam);
     };
 
     void setOrtho(glm::mat4 m)
     {
-        ortho = std::make_shared<glm::mat4>(m);
+        ortho = make_shared<glm::mat4>(m);
     };
 
     void setPerspective(glm::mat4 m)
     {
-        perspective = std::make_shared<glm::mat4>(m);
+        perspective = make_shared<glm::mat4>(m);
     };
 
-    void addShader(std::string name, std::string vert, std::string frag)
+    void addShader(string name, string vert, string frag)
     {
-        shaderManager[name] = std::make_shared<Shader>(vert.c_str(), frag.c_str());
+        shaderManager[name] = make_shared<Shader>(vert.c_str(), frag.c_str());
     };
+
+    void addTexture(string name, string path, TextureTypes type, TextureMode *mode)
+    {
+        textureManager[name] = make_shared<Texture>(path.c_str(), type);
+    }
 
     static ResourceManager& getInstance()
     {
@@ -69,7 +89,8 @@ public:
 private:
     ResourceManager(){};
 
-    unordered_map<std::string, shared_ptr<Shader>> shaderManager;
+    unordered_map<string, shared_ptr<Shader>> shaderManager;
+    unordered_map<string, shared_ptr<Texture>> textureManager;
     shared_ptr<Camera> camera;
     shared_ptr<glm::mat4> ortho;
     shared_ptr<glm::mat4> perspective;

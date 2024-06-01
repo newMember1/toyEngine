@@ -64,6 +64,7 @@ enum class ACTION
     LEFT,
     RIGHT,
     JUMP,
+    DOWN,
     NONE
 };
 
@@ -78,9 +79,35 @@ enum class MoveState
     NONE
 };
 
-enum class Type{
-    AIR,
-    STONE
+enum class TextureTypes
+{
+    TWOD,
+    THREED,
+    CUBEMAP,
+};
+
+enum class ChunkTypes
+{
+    NONE,
+    ROCK,
+    GRASS,
+    WATER,
+    DIAMOD,
+};
+
+struct TextureMode
+{
+    struct WrapMode
+    {
+        unsigned int WRAPS;
+        unsigned int WRAPT;
+    } wrapmode;
+
+    struct FilterMode
+    {
+        unsigned int MINFILTER;
+        unsigned int MAXFILTER;
+    } filtermode;
 };
 
 #endif

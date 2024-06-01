@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include "core/voxelBase.h"
 
 using std::vector;
@@ -14,10 +15,6 @@ public:
     SimpleBallVoxel();
     virtual ~SimpleBallVoxel();
     virtual bool rayHit(shared_ptr<HitRecord> h, shared_ptr<Ray> r) override;
-    virtual void updateModel(glm::mat4 m) override;
-    virtual void updateView(glm::vec2 deltaDirec) override;
-    virtual void move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > staticVoxls) override;
-    virtual void setSpeed(ACTION a) override;
     virtual void draw() override;
 
 private:

@@ -3,9 +3,11 @@
 #include "core/resourceManager.h"
 #include <glad/glad.h>
 
+#ifdef DEBUG
 #include <iostream>
 using std::cout;
 using std::endl;
+#endif
 
 PlaneVoxel::PlaneVoxel()
 {
@@ -35,7 +37,6 @@ PlaneVoxel::PlaneVoxel()
 
 PlaneVoxel::~PlaneVoxel()
 {
-    
 }
 
 bool PlaneVoxel::rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r)
@@ -118,22 +119,6 @@ void PlaneVoxel::genBuffers()
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-}
-
-void PlaneVoxel::updateModel(glm::mat4 m)
-{
-    model = m;
-    glm::vec3 newStartPos = glm::vec3(model * glm::vec4(startPos, 1.0));
-    boundingBox = std::make_shared<AABB>(newStartPos, newStartPos + glm::vec3(xLen, yLen, zLen));
-}
-
-void PlaneVoxel::updateView(glm::vec2 deltaDirec)
-{
-}
-
-void PlaneVoxel::move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > staticVoxels)
-{
-    //do nothind here
 }
 
 void PlaneVoxel::draw()

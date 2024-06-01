@@ -9,7 +9,7 @@
 using std::vector;
 using std::shared_ptr;
 
-class ScreenMovementsPublisher
+class MovePublisher
 {
 public:
     void setStaticVoxels(vector<shared_ptr<VoxelBase>> & s)
@@ -19,8 +19,7 @@ public:
 
     void processKeyBoardInput(ACTION a)
     {
-        //update speed
-        notifyAllUpdateSpeed(a);
+        notifyAllProcessKeyboardInput(a);
     }
 
     void processMouseInput(glm::vec2 deltaDirec)
@@ -35,13 +34,11 @@ public:
     }
 
 private:
-    void notifyAllUpdateSpeed(ACTION a)
+    void notifyAllProcessKeyboardInput(ACTION a)
     {
-        //only update objects that can move
-        //if hit static objects, we should move it back a little
         for(auto obser : moveableObservers)
         {
-            obser->setSpeed(a);
+            obser->processKeyboardInput(a);
         }
     }
 

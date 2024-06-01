@@ -4,7 +4,7 @@
 SimpleBallVoxel::SimpleBallVoxel()
 {
     radius = 0.1;
-    this->startPos = glm::vec3(-0.5, -0.7, -1);
+    this->startPos = glm::vec3(-0.5, 0, -1);
     float len = radius * 2 * sqrt(3);
     this->center = this->startPos + glm::vec3(len / 2);
     this->xLen = len;
@@ -159,73 +159,6 @@ float SimpleBallVoxel::getPenetration(int i, int j, int k, shared_ptr<VoxelBase>
     }
 
     return glm::min(xPen, glm::min(yPen, zPen));
-}
-
-void SimpleBallVoxel::updateView(glm::vec2 deltaDirec)
-{}
-
-void SimpleBallVoxel::updateModel(glm::mat4 m)
-{
-    model = m;
-    glm::vec3 newStartPos = glm::vec3(model * glm::vec4(startPos, 1.0));
-    boundingBox = std::make_shared<AABB>(newStartPos, newStartPos + glm::vec3(xLen, yLen, zLen));
-}
-
-void SimpleBallVoxel::move(float deltaTime, std::vector<std::shared_ptr<VoxelBase> > staticVoxls)
-{
-    glm::vec3 oldSpeed = speed;
-    updateSpeed(deltaTime);
-    glm::vec3 deltaMovement = (speed + oldSpeed) * deltaTime / 2.0f;
-
-    glm::mat4 tmpModel = glm::translate(model, deltaMovement);
-    auto tmpStartPos = glm::vec3(tmpModel * glm::vec4(startPos, 1.0f));
-    AABB tmpBoundingBox{tmpStartPos, tmpStartPos + glm::vec3(xLen, yLen, zLen)};
-
-    for(auto v : staticVoxls)
-    {
-        if(!voxelOverlap(v, tmpBoundingBox))
-        {
-            continue;
-        }
-    }
-
-    if(voxelHitResult->getStartPenetrating())
-    {
-        //move back penetrationDepth + epslion
-        float backDistance = voxelHitResult->getPenetrationDepth() + DISTANCE_EPSLION;
-        tmpModel = glm::translate(tmpModel, backDistance * voxelHitResult->getNormal());
-
-        if(glm::abs(voxelHitResult->getNormal().y - 1.0f) < FLOAT_EPSLION)
-        {
-            speed.y = 0;
-            onEarth = true;
-        }
-        else
-            onEarth = false;
-    }
-    else
-    {
-        onEarth = false;
-    }
-
-    updateModel(tmpModel);
-}
-
-void SimpleBallVoxel::setSpeed(ACTION a)
-{
-    if(a == ACTION::FRONT)
-        speed.z = -1;
-    else if(a == ACTION::BACKWARD)
-        speed.z = 1;
-    else if(a == ACTION::LEFT)
-        speed.x = -1;
-    else if(a == ACTION::RIGHT)
-        speed.x = 1;
-    else if(a == ACTION::JUMP)
-    {
-        if(onEarth)
-            speed.y = 5;
-    }
 }
 
 void SimpleBallVoxel::draw()

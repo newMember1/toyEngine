@@ -4,6 +4,7 @@
 #include "utils/ballMesh.h"
 #include "utils/circleMesh.h"
 #include <memory>
+#include <string>
 
 using std::shared_ptr;
 
