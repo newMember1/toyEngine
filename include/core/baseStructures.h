@@ -92,6 +92,8 @@ enum class ChunkTypes
     ROCK,
     GRASS,
     WATER,
+    TRUNK,
+    LEAF,
     DIAMOD,
 };
 

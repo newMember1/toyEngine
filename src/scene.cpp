@@ -4,6 +4,7 @@
 #include "voxels/planeVoxel.h"
 #include "voxels/simpleBallVoxel.h"
 #include "voxels/chunkVoxel.h"
+#include "voxels/treeVoxel.h"
 #include "environment/sky.h"
 
 scene::scene(int w, int h, std::shared_ptr<MovePublisher> p)
@@ -19,7 +20,7 @@ void scene::draw(float time)
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     //draw sky
     glDisable(GL_DEPTH_TEST);
@@ -52,7 +53,7 @@ void scene::init()
     //init objects
     auto s = std::make_shared<PlaneVoxel>();
     auto m = std::make_shared<SimpleBallVoxel>();
-    auto m1 = std::make_shared<ChunkVoxel>(ChunkTypes::ROCK);
+    auto m1 = std::make_shared<TreeChunk>();
 
     staticVoxels.push_back(s);
     moveableVoxels.push_back(m);
