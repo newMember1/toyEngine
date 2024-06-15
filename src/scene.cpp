@@ -1,10 +1,10 @@
 #include "scene.h"
 #include "core/resourceManager.h"
 
-#include "voxels/planeVoxel.h"
-#include "voxels/simpleBallVoxel.h"
+#include "voxels/plane.h"
+#include "voxels/simpleBall.h"
 #include "voxels/chunkVoxel.h"
-#include "voxels/treeVoxel.h"
+#include "voxels/tree.h"
 #include "environment/sky.h"
 
 scene::scene(int w, int h, std::shared_ptr<MovePublisher> p)
@@ -44,14 +44,15 @@ void scene::init()
     ResourceManager::getInstance().addShader("texture", "../shaders/texture.vert", "../shaders/texture.frag");
 
     //add textures;
-    ResourceManager::getInstance().addTexture("rock", "../assets/wall.jpg", TextureTypes::TWOD, nullptr);
+    ResourceManager::getInstance().addTexture("wall", "../assets/wall.jpg", TextureTypes::TWOD, nullptr);
+    ResourceManager::getInstance().addTexture("grass", "../assets/grass.png", TextureTypes::TWOD, nullptr);
 
     //init sky
     sky = std::make_shared<Sky>();
     sky->init(glm::vec3(1, 1, -1));
 
     //init objects
-    auto s = std::make_shared<PlaneVoxel>();
+    auto s = std::make_shared<PlaneVoxel>(30, 3, 30);
     auto m = std::make_shared<SimpleBallVoxel>();
     auto m1 = std::make_shared<TreeChunk>();
 

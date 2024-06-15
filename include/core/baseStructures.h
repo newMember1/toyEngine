@@ -19,8 +19,8 @@ const float EARTHTOPRADISU = 6420.f;
 const float EARTHRAYLEIGHSCALEHEIGHT = 8.0f;
 const float EARTHMIESCALEHEIGHT = 1.2f;
 
-static std::shared_ptr<Camera> globalCamera = std::make_shared<Camera>(glm::vec3(0, 0, 3));
-static glm::mat4 globalProjection = glm::perspective(glm::radians(45.0f), (float)(800)/(float)(600), 0.1f, 100.0f);
+static std::shared_ptr<Camera> globalCamera = std::make_shared<Camera>(glm::vec3(0, 15, 25));
+static glm::mat4 globalProjection = glm::perspective(glm::radians(45.0f), (float)(800)/(float)(600), 0.1f, 1000.0f);
 
 class Ray
 {
@@ -76,7 +76,7 @@ enum class MoveState
     RUN,
     WALK,
     FLY,
-    NONE
+    NONE,
 };
 
 enum class TextureTypes
@@ -88,13 +88,12 @@ enum class TextureTypes
 
 enum class ChunkTypes
 {
-    NONE,
     ROCK,
     GRASS,
     WATER,
-    TRUNK,
-    LEAF,
+    WALL,
     DIAMOD,
+    NONE,
 };
 
 struct TextureMode

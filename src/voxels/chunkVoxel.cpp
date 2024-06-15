@@ -19,6 +19,8 @@ string ChunkVoxel::getTextureName(ChunkTypes type)
             return "water";
         case ChunkTypes::DIAMOD:
             return "diamond";
+        case ChunkTypes::WALL:
+            return "wall";
         default:
             return "none";
     }

@@ -1,4 +1,4 @@
-#include "voxels/simpleBallVoxel.h"
+#include "voxels/simpleBall.h"
 #include "core/resourceManager.h"
 
 SimpleBallVoxel::SimpleBallVoxel()

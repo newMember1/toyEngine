@@ -1,11 +1,11 @@
-#include "voxels/treeVoxel.h"
+#include "voxels/tree.h"
 #include "core/resourceManager.h"
 
 TreeChunk::TreeChunk()
 {
     //generate vertices and VAOs
     genVertices();
-    this->model = glm::scale(glm::mat4(1.0F), glm::vec3(0.2f));
+    this->model = glm::translate(glm::mat4(1.0F), glm::vec3(0, 3, 0));
     this->view = globalCamera->GetViewMatrix();
     this->projection = globalProjection;
 }
@@ -22,45 +22,45 @@ void TreeChunk::genVertices()
         //position            //texcoord
         0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
         1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-        1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-        1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-        0.0f,  1.0f, 0.0f,  0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f,  1.0f, 1.0f,
+        1.0f, 1.0f, 0.0f,  1.0f, 1.0f,
+        0.0f, 1.0f, 0.0f,  0.0f, 1.0f,
         0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
 
-        0.0f, 0.0f,  1.0f,  0.0f, 0.0f,
-        1.0f, 0.0f,  1.0f,  1.0f, 0.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
-        0.0f,  1.0f,  1.0f,  0.0f, 1.0f,
-        0.0f, 0.0f,  1.0f,  0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
 
-        0.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,  1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,  1.0f, 1.0f,
         0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
         0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        0.0f, 0.0f,  1.0f,  0.0f, 0.0f,
-        0.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+        0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
 
-        1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-        1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,  1.0f, 1.0f,
         1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
         1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        1.0f, 0.0f,  1.0f,  0.0f, 0.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
 
         0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
         1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-        1.0f, 0.0f,  1.0f,  1.0f, 0.0f,
-        1.0f, 0.0f,  1.0f,  1.0f, 0.0f,
-        0.0f, 0.0f,  1.0f,  0.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
         0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
 
-        0.0f,  1.0f, 0.0f,  0.0f, 1.0f,
-        1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-        0.0f,  1.0f,  1.0f,  0.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,  0.0f, 1.0f
+        0.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f,  1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        0.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,  0.0f, 1.0f
     };
 
     //generate trunk vertices

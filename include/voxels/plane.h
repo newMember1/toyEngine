@@ -12,18 +12,19 @@ using std::shared_ptr;
 class PlaneVoxel : public VoxelBase
 {
 public:
-    PlaneVoxel();
+    PlaneVoxel() = delete;
+    PlaneVoxel(int xc, int yc, int zc);
     virtual ~PlaneVoxel();
     virtual bool rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r) override;
     virtual void draw() override;
 
 private:
+    void generateHeightMap();
     void genVertices();
     void genBuffers();
-    void pushSubVoxelPositions(float xStart, float yStart, float zStart, float xEnd, float yEnd, float zEnd);
 
-    vector<float> positions;
-    vector<int> indices;
+    vector<float> heightMaps;
+    vector<float> planeVertices;
 
     std::string shaderName;
     float deltaX, deltaY, deltaZ;
