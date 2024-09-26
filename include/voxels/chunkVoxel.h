@@ -14,7 +14,7 @@ class ChunkVoxel : public VoxelBase
 friend class TreeChunk;
 
 public:
-    ChunkVoxel() {};
+    ChunkVoxel(const ChunkVoxel& oldVoxel);
     ChunkVoxel(ChunkTypes type);
     ChunkVoxel(ChunkTypes type, string shaderName, glm::mat4 m, glm::vec3 sPos, int xc, int yc, int zc);
     virtual ~ChunkVoxel();

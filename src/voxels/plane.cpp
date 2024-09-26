@@ -69,7 +69,6 @@ void PlaneVoxel::genVertices()
     * 14 0.999239 0.749833
     */
 
-
     //(0, 0, 0) --> (1, 1, 1)
     float vertices[] = {
         //position            //texcoord
@@ -163,16 +162,17 @@ void PlaneVoxel::genBuffers()
 
 void PlaneVoxel::draw()
 {
-    auto shader = ResourceManager::getInstance().getShader(shaderName);
-    auto tex = ResourceManager::getInstance().getTexture("grass");
-    tex->use();
-    shader->use();
-    shader->setMat4("model", model);
-    shader->setMat4("view", view);
-    shader->setMat4("projection", projection);
+    //draw grass
+    auto grassShader = ResourceManager::getInstance().getShader(shaderName);
+    auto grassTex = ResourceManager::getInstance().getTexture("grass");
+    grassTex->use();
+    grassShader->use();
+    grassShader->setMat4("model", model);
+    grassShader->setMat4("view", view);
+    grassShader->setMat4("projection", projection);
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, planeVertices.size() / 5);
     glBindVertexArray(0);
-    shader->release();
-    tex->release();
+    grassShader->release();
+    grassTex->release();
 }

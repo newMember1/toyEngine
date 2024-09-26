@@ -2,6 +2,7 @@
 #define TEST_H
 
 #include "core/voxelBase.h"
+#include "voxels/chunkVoxel.h"
 #include <memory>
 #include <vector>
 #include <string>

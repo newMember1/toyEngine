@@ -46,6 +46,7 @@ void scene::init()
     //add textures;
     ResourceManager::getInstance().addTexture("wall", "../assets/wall.jpg", TextureTypes::TWOD, nullptr);
     ResourceManager::getInstance().addTexture("grass", "../assets/grass.png", TextureTypes::TWOD, nullptr);
+    ResourceManager::getInstance().addTexture("rock", "../assets/tuff_bricks.png", TextureTypes::TWOD, nullptr);
 
     //init sky
     sky = std::make_shared<Sky>();
@@ -55,6 +56,16 @@ void scene::init()
     auto s = std::make_shared<PlaneVoxel>(30, 3, 30);
     auto m = std::make_shared<SimpleBallVoxel>();
     auto m1 = std::make_shared<TreeChunk>();
+
+    vector<shared_ptr<ChunkVoxel>> rocks;
+    for (int i = 0; i < 10; ++i)
+    {
+        int x = rand() % 20;
+        int y = rand() % 3 + 3;
+        int z = rand() % 20;
+        shared_ptr<ChunkVoxel> voxel = make_shared<ChunkVoxel>(ChunkTypes::ROCK, "texture", glm::mat4(1.0f), glm::vec3(x, y, z), 1, 1, 1);
+        staticVoxels.push_back(voxel);
+    }
 
     staticVoxels.push_back(s);
     moveableVoxels.push_back(m);

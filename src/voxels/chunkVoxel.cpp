@@ -80,45 +80,45 @@ void ChunkVoxel::genVertices()
         //position            //texcoord
         0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
         1.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-        1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-        1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-        0.0f,  1.0f, 0.0f,  0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f,  1.0f, 1.0f,
+        1.0f, 1.0f, 0.0f,  1.0f, 1.0f,
+        0.0f, 1.0f, 0.0f,  0.0f, 1.0f,
         0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
 
-        0.0f, 0.0f,  1.0f,  0.0f, 0.0f,
-        1.0f, 0.0f,  1.0f,  1.0f, 0.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 1.0f,
-        0.0f,  1.0f,  1.0f,  0.0f, 1.0f,
-        0.0f, 0.0f,  1.0f,  0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
 
-        0.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,  1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,  1.0f, 1.0f,
         0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
         0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        0.0f, 0.0f,  1.0f,  0.0f, 0.0f,
-        0.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+        0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
 
-        1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-        1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f,  1.0f, 1.0f,
         1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
         1.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        1.0f, 0.0f,  1.0f,  0.0f, 0.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
 
         0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
         1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-        1.0f, 0.0f,  1.0f,  1.0f, 0.0f,
-        1.0f, 0.0f,  1.0f,  1.0f, 0.0f,
-        0.0f, 0.0f,  1.0f,  0.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+        1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
         0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
 
-        0.0f,  1.0f, 0.0f,  0.0f, 1.0f,
-        1.0f,  1.0f, 0.0f,  1.0f, 1.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-        1.0f,  1.0f,  1.0f,  1.0f, 0.0f,
-        0.0f,  1.0f,  1.0f,  0.0f, 0.0f,
-        0.0f,  1.0f, 0.0f,  0.0f, 1.0f
+        0.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f,  1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        1.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+        0.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,  0.0f, 1.0f
     };
 
     assert(xCount >= 1 & yCount >= 1 && zCount >= 1);
@@ -136,9 +136,9 @@ void ChunkVoxel::genVertices()
             {
                 for (int n = 0; n < 36; ++n)
                 {
-                    newVertices.push_back(vertices[5 * n + 0] + i);
-                    newVertices.push_back(vertices[5 * n + 1] + j);
-                    newVertices.push_back(vertices[5 * n + 2] + k);
+                    newVertices.push_back(vertices[5 * n + 0] + i + startPos.x);
+                    newVertices.push_back(vertices[5 * n + 1] + j + startPos.y);
+                    newVertices.push_back(vertices[5 * n + 2] + k + startPos.z);
                     newVertices.push_back(vertices[5 * n + 3]);
                     newVertices.push_back(vertices[5 * n + 4]);
                 }
@@ -168,6 +168,8 @@ bool ChunkVoxel::rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r)
 void ChunkVoxel::draw()
 {
     auto shader = ResourceManager::getInstance().getShader(shaderName);
+    auto tex = ResourceManager::getInstance().getTexture(textureName);
+    tex->use();
     shader->use();
     shader->setInt("tex", 0);
     shader->setMat4("model", model);
@@ -177,4 +179,5 @@ void ChunkVoxel::draw()
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
     shader->release();
+    tex->release();
 }
