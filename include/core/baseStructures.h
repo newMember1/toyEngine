@@ -19,7 +19,8 @@ const float EARTHTOPRADISU = 6420.f;
 const float EARTHRAYLEIGHSCALEHEIGHT = 8.0f;
 const float EARTHMIESCALEHEIGHT = 1.2f;
 
-static std::shared_ptr<Camera> globalCamera = std::make_shared<Camera>(glm::vec3(0, 15, 25));
+extern std::shared_ptr<Camera> globalCamera;
+
 static glm::mat4 globalProjection = glm::perspective(glm::radians(45.0f), (float)(800)/(float)(600), 0.1f, 1000.0f);
 
 class Ray

@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "core/baseStructures.h"
 #include "core/resourceManager.h"
 
 #include "voxels/plane.h"
@@ -6,6 +7,8 @@
 #include "voxels/chunkVoxel.h"
 #include "voxels/tree.h"
 #include "environment/sky.h"
+
+std::shared_ptr<Camera> globalCamera = std::make_shared<Camera>(glm::vec3(0, 15, 25));
 
 scene::scene(int w, int h, std::shared_ptr<MovePublisher> p)
 {

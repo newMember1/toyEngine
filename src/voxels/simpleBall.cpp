@@ -163,6 +163,8 @@ float SimpleBallVoxel::getPenetration(int i, int j, int k, shared_ptr<VoxelBase>
 
 void SimpleBallVoxel::draw()
 {
+    view = globalCamera->GetViewMatrix();
+
     auto shaderProgram = ResourceManager::getInstance().getShader(shaderName);
     shaderProgram->use();
     shaderProgram->setVec4("color", glm::vec4(0.82, 0.41, 0.12, 1.0));

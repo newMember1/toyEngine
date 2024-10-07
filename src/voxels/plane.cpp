@@ -162,6 +162,8 @@ void PlaneVoxel::genBuffers()
 
 void PlaneVoxel::draw()
 {
+    view = globalCamera->GetViewMatrix();
+
     //draw grass
     auto grassShader = ResourceManager::getInstance().getShader(shaderName);
     auto grassTex = ResourceManager::getInstance().getTexture("grass");

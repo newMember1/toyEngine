@@ -114,8 +114,11 @@ void TreeChunk::genVertices()
     glEnableVertexAttribArray(1);
 }
 
+#include <iostream>
+using namespace std;
 void TreeChunk::draw()
 {
+    view = globalCamera->GetViewMatrix();
     //draw tree trunk
     //77 49 31
     auto treeTrunkShader = ResourceManager::getInstance().getShader(trunkShader);

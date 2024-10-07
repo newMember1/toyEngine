@@ -167,6 +167,8 @@ bool ChunkVoxel::rayHit(std::shared_ptr<HitRecord> h, std::shared_ptr<Ray> r)
 
 void ChunkVoxel::draw()
 {
+    view = globalCamera->GetViewMatrix();
+
     auto shader = ResourceManager::getInstance().getShader(shaderName);
     auto tex = ResourceManager::getInstance().getTexture(textureName);
     tex->use();

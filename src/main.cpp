@@ -3,14 +3,12 @@
 
 #include "core/baseStructures.h"
 #include "scene.h"
+#include "windowProcess.h"
 
 #include <iostream>
 #include <vector>
 using namespace std;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window, std::shared_ptr<MovePublisher> publisher);
 
 int SCR_WIDTH = 800;
@@ -32,9 +30,9 @@ int main(void)
         return -1;
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    // glfwSetScrollCallback(window, scroll_callback);
+    glfwSetFramebufferSizeCallback(window, fbSizeCB);
+    glfwSetCursorPosCallback(window, mouseCB);
+    glfwSetScrollCallback(window, scrollCB);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -97,45 +95,3 @@ void processInput(GLFWwindow *window, std::shared_ptr<MovePublisher> publisher)
 
     publisher->processKeyBoardInput(a);
 }
-
-//reseize window
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
-}
-
-//handle view's change when left button is pressed
-float xPosPressed, yPosPressed;
-float deltaX, deltaY;
-bool pressed = false;
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    //if cursor pos change then this function will be called
-    int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-    if(state == GLFW_PRESS && pressed == false)//only store the position when we press left button
-    {
-        pressed = true;
-        xPosPressed = xpos;
-        yPosPressed = ypos;
-    }
-    if(state == GLFW_RELEASE)
-    {
-        pressed = false;
-    }
-
-    if(pressed)
-    {
-        deltaX = xpos - xPosPressed;
-        deltaY = ypos - yPosPressed;
-    }
-}
-
-// // glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// // ----------------------------------------------------------------------
-// void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-// {
-//     camera.ProcessMouseScroll(yoffset);
-// }
-
