@@ -5,12 +5,6 @@
 
 #include <stdlib.h>
 
-#ifdef DEBUG
-#include <iostream>
-using std::cout;
-using std::endl;
-#endif
-
 void PlaneVoxel::generateHeightMap()
 {
     for(int i = 0; i < this->xCount; ++i)

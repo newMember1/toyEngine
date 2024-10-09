@@ -41,7 +41,7 @@ void mouseCB(GLFWwindow* window, double xpos, double ypos)
         gPressed = false;
     }
 
-    globalCamera->ProcessMouseMovement(deltaX, deltaY);
+    globalCamera->ProcessMouseMovement(-deltaX, deltaY);
 }
 
 void scrollCB(GLFWwindow* window, double xoffset, double yoffset)

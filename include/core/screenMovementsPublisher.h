@@ -4,7 +4,6 @@
 #include "voxelBase.h"
 #include <vector>
 #include <memory>
-#include <iostream>
 
 using std::vector;
 using std::shared_ptr;

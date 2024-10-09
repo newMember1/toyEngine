@@ -7,7 +7,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <iostream>
+#include "debugPrint.h"
 
 class Shader
 {
@@ -28,7 +28,7 @@ public:
             cShaderFile.close();
             computeCode = cShaderStream.str();
         } catch (std::ifstream::failure& e) {
-            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+            DBG_ERR("FILE_NOT_SUCCESFULLY_READ");
         }
 
         const char * cShaderCode = computeCode.c_str();
@@ -46,8 +46,8 @@ public:
 
     Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
     {
-        std::cout<<vertexPath<<std::endl;
-        std::cout<<fragmentPath<<std::endl;
+        DBG_OUT("%s",vertexPath);
+        DBG_OUT("%s",fragmentPath);
         // 1. retrieve the vertex/fragment source code from filePath
         std::string vertexCode;
         std::string fragmentCode;
@@ -86,7 +86,7 @@ public:
         }
         catch (std::ifstream::failure& e)
         {
-            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+            DBG_ERR("FILE_NOT_SUCCESFULLY_READ");
         }
         const char* vShaderCode = vertexCode.c_str();
         const char * fShaderCode = fragmentCode.c_str();
@@ -209,7 +209,7 @@ private:
             if(!success)
             {
                 glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-                std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+                DBG_ERR("SHADER_COMPILATION_ERROR of type: %s\n %s", type.c_str(), infoLog);
             }
         }
         else
@@ -218,7 +218,7 @@ private:
             if(!success)
             {
                 glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-                std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+                DBG_ERR("PROGRAM_LINKING_ERROR of type: %s\n %s", type.c_str(), infoLog);
             }
         }
     }

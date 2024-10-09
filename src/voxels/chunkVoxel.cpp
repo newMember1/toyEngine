@@ -1,12 +1,6 @@
 #include "voxels/chunkVoxel.h"
 #include "core/resourceManager.h"
 
-#ifdef DEBUG
-#include <iostream>
-using std::cout;
-using std::endl;
-#endif
-
 string ChunkVoxel::getTextureName(ChunkTypes type)
 {
     switch(type)

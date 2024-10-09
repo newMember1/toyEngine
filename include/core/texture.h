@@ -4,9 +4,7 @@
 #include "core/baseStructures.h"
 #include "stb_image.h"
 
-#include <iostream>
-using std::cout;
-using std::endl;
+#include "debugPrint.h"
 
 /*currently only support 2D texture*/
 class Texture
@@ -19,7 +17,7 @@ public:
         if(type != TextureTypes::TWOD)
         {
             //do nothing but log error
-            cout<<"Texture::ERROR:not supported types";
+            DBG_ERR("not supported texture types");
         }
 
         int width, height, nrChannels;
@@ -35,7 +33,6 @@ public:
 
         stbi_set_flip_vertically_on_load(true);
         unsigned char *data = stbi_load(path, &width, &height, &nrChannels, 0);
-        cout<<"nrChannels is: "<<nrChannels<<endl;
         if (data)
         {
             if(nrChannels == 4)
@@ -46,7 +43,7 @@ public:
         }
         else
         {
-            cout << "Failed to load texture" << std::endl;
+            DBG_ERR("Failed to load texture");
         }
     }
 

@@ -9,6 +9,8 @@
 #include "core/shader.h"
 #include "core/texture.h"
 
+#include "debugPrint.h"
+
 using std::string;
 using std::shared_ptr;
 using std::make_shared;
@@ -40,8 +42,7 @@ public:
     {
         if(shaderManager.find(name) != shaderManager.end())
             return shaderManager[name];
-
-        cout<<"SHADER: "<<name<<"not found!"<<endl;
+        DBG_ERR("SHADER: %s not found!!!", name.c_str());
     }
 
     shared_ptr<Texture> getTexture(string name)
@@ -49,7 +50,7 @@ public:
         if(textureManager.find(name) != textureManager.end())
             return textureManager[name];
 
-        cout<<"TEXTURE: "<<name<<"not found!"<<endl;
+        DBG_ERR("TEXTURE: %s not found!!!", name.c_str());
     }
 
     void setCamera(Camera cam)

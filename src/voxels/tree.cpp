@@ -114,8 +114,6 @@ void TreeChunk::genVertices()
     glEnableVertexAttribArray(1);
 }
 
-#include <iostream>
-using namespace std;
 void TreeChunk::draw()
 {
     view = globalCamera->GetViewMatrix();

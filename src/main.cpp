@@ -5,7 +5,7 @@
 #include "scene.h"
 #include "windowProcess.h"
 
-#include <iostream>
+#include "core/debugPrint.h"
 #include <vector>
 using namespace std;
 
@@ -25,7 +25,7 @@ int main(void)
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "toyEngine", NULL, NULL);
     if (window == NULL)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        DBG_ERR("Failed to create GLFW window");
         glfwTerminate();
         return -1;
     }
@@ -36,7 +36,7 @@ int main(void)
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        DBG_ERR("Failed to initialize GLAD");
         return -1;
     }
 

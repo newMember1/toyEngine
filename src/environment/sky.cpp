@@ -1,7 +1,4 @@
 #include "environment/sky.h"
-#include <iostream>
-using std::cout;
-using std::endl;
 
 void Sky::init(glm::vec3 direc)
 {
