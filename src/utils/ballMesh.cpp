@@ -1,5 +1,4 @@
 #include "utils/ballMesh.h"
-#include <iostream>
 
 BallMesh::BallMesh(int angle)
 {

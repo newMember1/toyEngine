@@ -1,5 +1,4 @@
 #include "windowProcess.h"
-#include <iostream>
 using namespace std;
 
 bool gPressed = false;

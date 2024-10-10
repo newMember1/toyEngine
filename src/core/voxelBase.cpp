@@ -1,5 +1,4 @@
 #include "core/voxelBase.h"
-#include <iostream>
 
 int VoxelBase::getIndex(int x, int y, int z)
 {
